@@ -3,7 +3,7 @@ namespace Roles_Claims.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Manager , Member")]
 public class TodoController : Controller
 {
       private readonly ILogger<TodoController> _logger;
@@ -12,9 +12,16 @@ public class TodoController : Controller
       {
             _logger = logger;
       }
-      [HttpGet]
+      [HttpGet("Hello_Auth")]
       public IActionResult Hello()
       {
             return Ok("HelloWorld");
+      }
+
+      [HttpGet("World_Policy")]
+      [Authorize(Policy = "AdminAccessPolicy")]
+      public IActionResult World()
+      {
+            return Ok("World");
       }
 }

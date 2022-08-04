@@ -30,13 +30,19 @@ builder.Services.AddAuthentication(o =>
                         ValidateIssuer = false,
                         ValidateAudience = false,
                         ValidateLifetime = true,
-                        RequireExpirationTime = false
+                        RequireExpirationTime = false,
                   };
             });
 
-builder.Services.AddDefaultIdentity<IdentityUser>
+builder.Services.AddIdentity<IdentityUser, IdentityRole>
       (o => o.SignIn.RequireConfirmedAccount = true)
       .AddEntityFrameworkStores<Context>();
+
+builder.Services.AddAuthorization(o =>
+{
+      o.AddPolicy("AdminAccessPolicy",
+            policy => policy.RequireClaim("AdminAccess"));
+});
 
 
 builder.Services.AddControllers();
@@ -56,7 +62,6 @@ if (app.Environment.IsDevelopment())
       app.UseSwagger();
       app.UseSwaggerUI();
 }
-app.UseCors(o => o.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
 app.UseHttpsRedirection();
 
@@ -65,6 +70,8 @@ app.UseRouting();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseCors(o => o.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
 app.MapControllers();
 
