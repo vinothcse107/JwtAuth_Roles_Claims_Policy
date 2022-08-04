@@ -107,8 +107,6 @@ public class AuthManagementController : ControllerBase
 
       private async Task<List<Claim>> GetAllValidClaims(IdentityUser user)
       {
-            var _options = new IdentityOptions();
-
             var claims = new List<Claim>
             {
                   new Claim("Id" , user.Id),
